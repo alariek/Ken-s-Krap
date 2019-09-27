@@ -1,0 +1,48 @@
+RHSAT Reboots
+#!/bin/sh
+# Add your shell script below
+date; sleep $((RANDOM%3600+1)); date
+shutdown -r now
+
+
+
+aciwwmr01vm.nix.aciww.com   Rebooted
+blr3lqalink01vm	Rebooted
+blr3lqautl01vm	Rebooted
+blr3lqaweb01vm	Rebooted
+bol3focalpt01	504 Kernel Rebooted
+bol3fpdoorst01	Rebooted
+bol3lperfapp04vm  Rebooted	
+bol3lperfutl04vm	504 Kernel Rebooted
+bol3lperfweb04vm	504 Kernel Rebooted
+clt3lsqap02vm	Rebooted
+clt3lsqupp01vm	10.28.62.109    
+clt3lsqws01vm	Rebooted
+cov3ldb01vm.nix.aciww.com   Rebooted
+cov3lengr001vm.nix.aciww.com	Kernel 504 fsck  rebooted
+cov3lengr002vm.nix.aciww.com	Rebooted
+cov3lengr003vm.nix.aciww.com	Kernel 504 fsck  rebooted
+cov3leps01.nix.aciww.com	Set Domain rebotoed
+cov3leps03vm	504 Kernel Rebooted
+cov3leps04vm	Rebooted
+cov3lmtslinux01vm	Kernel 504 fsck  Reboot
+cov3lmtsuppdl03vm	Kernel 504 fsck  Reboot
+cov3lmtsuppdl04vm  Rebooted	
+cov3lstmmgr01vm	Kernel 504 fsck  Rebooted
+cov3lstmprx01vm	Rebooted
+fahrenheit   10.13.23.186	
+man3archdb1.am.tsacorp.com	
+man3itcamsrv01	
+man3tsweb02vm.am.tsacorp.com	Reboot
+man3tsweb05vm.am.tsacorp.com   Reboot
+
+	
+Down SAt morning  Not a full list
+clt3lsqap05vm.ep.clt.s1.com 10.28.62.88
+cov3lengr004vm.nix.aciww.com  
+clt3lsqap04vm.ep.clt.s1.com
+clt3lsqdb01vm.ep.clt.s1.com
+clt3lsqac02vm.ep.clt.s1.com
+clt3lsqap03vm.ep.clt.s1.com
+clt3lsqap05vm.ep.clt.s1.com
+clt3lsqac01vm.ep.clt.s1.com

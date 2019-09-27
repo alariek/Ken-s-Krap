@@ -1,0 +1,92 @@
+To compile bash fresh:
+https://ftp.gnu.org/gnu/bash/
+
+Get tar file and patches
+
+cltvm30:/tmp/bash/bash-2.05b # tar zxvf bash-2.05b.tar.gz
+
+cltvm30:/tmp/bash # cd bash-2.05b
+
+root@cltvm71:/tmp/bash/bash-3.1#patch -p0 < ../bash31-001.txt
+	.
+	.
+root@cltvm71:/tmp/bash/bash-3.1#patch -p0 < ../bash31-020.txt
+
+root@cltvm71:/tmp/bash/bash-3.1# ./configure && make && make install
+
+root@cltvm71:/tmp/bash/bash-3.1# rm /bin/bash
+
+root@cltvm71:/tmp/bash/bash-3.1# cp ./bash /bin/bash
+
+TO test
+
+For Exploit 1 (CVE-2014-6271)
+root@cltvm71:/tmp# env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
+this is a test
+--If you see "vulnerable" you need to update bash. Otherwise, you should be good to go.
+
+For Exploit 2 (CVE-2014-7169)
+root@cltvm71:/tmp# env X='() { (shellshocker.net)=>\' bash -c "echo date"; cat echo ; rm -f echo
+date
+cat: echo: No such file or directory
+-- If the above command outputs the current date (it may also show errors), you are still vulnerable.
+
+For Exploit 3
+root@cltvm71:/tmp# env -i X=' () { }; echo hello' bash -c 'date'
+Mon Sep 29 16:22:03 EDT 2014
+--If the above command outputs "hello", you are vulnerable.
+
+On vader
+vader:/root# which bash
+/usr/bin/bash
+vader:/root# cd /usr/bin
+vader:/usr/bin# ls -l bash
+lrwxrwxrwx   1 root     system           27 Jan 20 2004  bash -> ../../opt/freeware/bin/bash
+
+wget --no-check-certificate https://nrc3lrhsat01vm.nix.aciww.com/pub/bash-3.2-33.el5_11.4.i386.rpm
+wget --no-check-certificate https://nrc3lrhsat01vm.nix.aciww.com/pub/bash-3.2-33.el5_11.4.x86_64.rpm
+wget --no-check-certificate https://nrc3lrhsat01vm.nix.aciww.com/pub/bash-4.1.2-15.el6_5.2.x86_64.rpm
+wget --no-check-certificate https://10.13.60.29/pub/bash-3.2-33.el5_11.4.x86_64.rpm
+rpm -Uvv bash-3.2-33.el5_11.4.i386.rpm
+
+/var/opt/BESClient/detectBashVul.sh
+/var/opt/BESClient/RHdetectBashVul.sh
+
+[root@cltsvntest-vm03 BESClient]# ./detectBashVul.sh
+echo vulnerable
+cat: echo: No such file or directory
+echo vulnerable
+cat: echo: No such file or directory
+[root@cltsvntest-vm03 BESClient]# ./RHdetectBashVul.sh
+
+
+[root@app11 BESClient]# more detectBashVul.sh
+env X="() { :;} ; echo vulnerable" /bin/sh -c "echo " > "/var/opt/BESClient/isBashVulnerable.txt"
+env X="() { :;} ; echo vulnerable" `which bash` -c "echo " >> "/var/opt/BESClient/isBashVulnerable.txt"
+
+rm -f echo && env -i  X='() { (a)=>\' /bin/sh -c 'echo echo vulnerable'; cat echo  >> "/var/opt/BESClient/isBashVulnerable.txt"
+rm -f echo && env -i  X='() { (a)=>\' `which bash` -c 'echo echo vulnerable'; cat echo  >> "/var/opt/BESClient/isBashVulnerable.txt"
+
+[root@app11 BESClient]# more RHdetectBashVul.sh
+rm "/var/opt/BESClient/RHisBashVulnerable.txt"
+
+VUNERABLE=false;
+CVE20146271="$(env 'x=() { :;}; echo vulnerable' 'BASH_FUNC_x()=() { :;}; echo vulnerable' bash -c "ech
+o test" 2>&1 )"
+
+CVE20147169=$(cd /tmp 2>&1; rm -f /tmp/echo 2>&1; env 'x=() { (a)=>\' bash -c "echo uname" 2>&1; cat /tmp/echo 2>&1; rm -f /tmp/echo 2>&1 )
+
+if [[ "$CVE20146271" =~ "vulnerable" ]] ; then
+    echo "Vulnerable CVE-2014-6271" > "/var/opt/BESClient/RHisBashVulnerable.txt"
+elif [[ "$CVE20146271" =~ "bash: error importing function definition for 'x'" ]] ; then
+    echo "Not current CVE-2014-6271" >> "/var/opt/BESClient/RHisBashVulnerable.txt"
+else
+    echo "Not Vulnerable CVE-2014-6271" >> "/var/opt/BESClient/RHisBashVulnerable.txt"
+fi
+
+if [[ "$CVE20147169" =~ `uname` ]] ; then
+    echo "Vulnerable CVE-2014-7169" >> "/var/opt/BESClient/RHisBashVulnerable.txt"
+    VUNERABLE=true;
+else
+   echo "Not Vulnerable CVE-2014-7169" >> "/var/opt/BESClient/RHisBashVulnerable.txt"
+fi

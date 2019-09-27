@@ -1,0 +1,18 @@
+Run to register a new system:
+curl --insecure https://nrc3lrhsat01vm.am.tsacorp.com/pub/bootstrap/bootstrap.sh | /bin/bash
+
+Does the same as above with wget.  The above is preferred.
+wget O --no-check-certificate https://nrc3lrhsat01vm.am.tsacorp.com/pub/bootstrap/bootstrap.sh | /bin/bash
+
+Run on a new RHEL system to get rhnsd, osad, a others loaded.
+yum clean all; rhn-profile-sync; yum -y update rhn\* yum\*
+yum -y install osad; service osad restart
+chkconfig osad on; service rhnsd restart
+chkconfig rhnsd on
+
+
+
+ rm -rf /var/cache/yum/*
+
+To restart services on RHSAT
+rhn-satellite restart
